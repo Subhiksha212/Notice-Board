@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// Import the necessary router component
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
@@ -20,6 +21,11 @@ import Archive from "./pages/Archive";
 import UserManagement from "./pages/UserManagement";
 import Settings from "./pages/Settings";
 
+// Define the base name for routing.
+// IMPORTANT: This must match your GitHub repository name prefixed with a slash.
+// Your repository name is 'Notice-Board'.
+const basename = process.env.NODE_ENV === "production" ? "/Notice-Board" : "/";
+
 // Create a new QueryClient instance
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,13 +38,12 @@ const queryClient = new QueryClient({
 
 // Main application content, wrapped in providers
 const AppContent = () => {
-  const { user, signOut, role } = useAuth(); // Correctly destructure `role` here
+  const { user, signOut, role } = useAuth();
 
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-gradient-subtle">
-        {/* Pass the role to AppSidebar */}
-        <AppSidebar role={role} /> 
+        <AppSidebar role={role} />
         <div className="flex-1 flex flex-col">
           <header className="h-16 flex items-center justify-between border-b bg-card/80 backdrop-blur-sm px-6 shadow-sm sticky top-0 z-40">
             <div className="flex items-center">
@@ -104,7 +109,11 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        {/*
+          💡 FIX: Added 'basename' to BrowserRouter. 
+          This tells React Router that the application's base URL is the repository path.
+        */}
+        <BrowserRouter basename={basename}> 
           <AppContent />
         </BrowserRouter>
       </TooltipProvider>
