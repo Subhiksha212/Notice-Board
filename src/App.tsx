@@ -4,7 +4,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// Import the necessary router component
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
@@ -24,7 +23,7 @@ import Settings from "./pages/Settings";
 // Define the base name for routing.
 // IMPORTANT: This must match your GitHub repository name prefixed with a slash.
 // Your repository name is 'Notice-Board'.
-const basename = process.env.NODE_ENV === "production" ? "/Notice-Board" : "/";
+const basename = import.meta.env.MODE === "production" ? "/Notice-Board" : "/";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient({
@@ -110,10 +109,10 @@ const App = () => (
         <Toaster />
         <Sonner />
         {/*
-          💡 FIX: Added 'basename' to BrowserRouter. 
-          This tells React Router that the application's base URL is the repository path.
+          💡 IMPORTANT: Added 'basename' to BrowserRouter for GitHub Pages deployment
+          This ensures routes work correctly in production
         */}
-        <BrowserRouter basename={basename}> 
+        <BrowserRouter basename={basename}>
           <AppContent />
         </BrowserRouter>
       </TooltipProvider>
